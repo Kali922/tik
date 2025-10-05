@@ -15,6 +15,9 @@ RUN apt-get update && \
     python3-pip && \
     apt-get clean
 
+# Create a non-root user (with UID 10014 for example)
+RUN useradd -m -u 10014 appuser
+
 # Set the working directory inside the container
 WORKDIR /app
 
@@ -24,8 +27,14 @@ COPY Run_bots.sh /app/Run_bots.sh
 COPY bots_config.json /app/bots_config.json
 COPY README.md /app/README.md
 
+# Change file ownership to the non-root user
+RUN chown -R appuser:appuser /app
+
 # Make the scripts executable
 RUN chmod +x /app/Build_bots.sh /app/Run_bots.sh
+
+# Switch to non-root user
+USER appuser
 
 # If Build_bots.sh installs dependencies, run it here
 RUN ./Build_bots.sh
