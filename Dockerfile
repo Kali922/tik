@@ -16,7 +16,7 @@ RUN apt-get update && \
     apt-get clean
 
 # Create a non-root user (with UID 10014 for example)
-RUN useradd -m -u 10014 appuser
+RUN useradd -m -u 10001 appuser
 
 # Set the working directory inside the container
 WORKDIR /app
